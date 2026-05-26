@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Archeo SIGNAL explore l'archéologie augmentée par l'IA, le LiDAR, la reconstruction 3D et la préservation numérique du patrimoine."
+    />
+    <meta property="og:title" content="Archeo SIGNAL - Archéologie augmentée" />
+    <meta
+      property="og:description"
+      content="Une expérience archéo-tech immersive autour des scans LiDAR, des artefacts, des ruines et des archives numériques."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#080604" />
+    <title>Archeo SIGNAL - Archéologie augmentée</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-ink text-bone antialiased">
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+
+    <div class="intro-chamber" data-intro aria-label="Séquence d'introduction archéo-tech">
+      <canvas id="intro-canvas" aria-hidden="true"></canvas>
+      <div class="intro-grain" aria-hidden="true"></div>
+      <div class="intro-scan" aria-hidden="true"></div>
+      <div class="intro-glyphs" aria-hidden="true">
+        <span>𓂀</span>
+        <span>𓇳</span>
+        <span>𓉐</span>
+      </div>
+
+      <div class="intro-ui">
+        <div class="intro-status">
+          <span>DETECTING SUBSURFACE STRUCTURE</span>
+          <span>ARTIFACT SIGNATURE FOUND</span>
+          <span>LIDAR SCAN INITIALIZED</span>
+          <span>RECONSTRUCTION MATRIX ONLINE</span>
+          <span>ARCHÉO-TECH INTERFACE READY</span>
+        </div>
+
+        <div class="intro-core">
+          <span class="intro-ring"></span>
+          <span class="intro-ring"></span>
+          <span class="intro-ring"></span>
+          <strong>RELIC 07</strong>
+        </div>
+
+        <div class="intro-readout">
+          <span>Depth layer 04</span>
+          <span>Material: limestone / bronze trace</span>
+          <span>Preservation confidence 91%</span>
+        </div>
+      </div>
+
+      <button class="skip-intro" type="button" data-skip-intro>Skip intro</button>
+    </div>
+
+    <header
+      id="site-nav"
+      class="fixed inset-x-0 top-0 z-50 border-b border-transparent px-5 py-4 transition duration-300 md:px-10"
+    >
+      <nav class="mx-auto flex max-w-[1440px] items-center justify-between gap-6">
+        <a href="#top" class="brand" aria-label="Retour en haut de page">
+          <span class="font-serif text-2xl italic leading-none">Archeo</span>
+          <span class="text-lg font-extrabold leading-none">SIGNAL</span>
+        </a>
+
+        <button
+          class="icon-btn md:hidden"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          data-menu-toggle
+        >
+          <span class="sr-only">Ouvrir le menu</span>
+          <i data-lucide="menu"></i>
+        </button>
+
+        <div class="hidden items-center gap-8 md:flex">
+          <a class="nav-link" href="#overview">Système</a>
+          <a class="nav-link" href="#excavation">Excavation</a>
+          <a class="nav-link" href="#archive">Archive</a>
+          <a class="btn btn-primary" href="#video">
+            Lancer le scan
+            <i data-lucide="scan-line"></i>
+          </a>
+        </div>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        class="pointer-events-none mx-auto mt-4 grid max-h-0 max-w-[1440px] gap-3 overflow-hidden opacity-0 transition-all duration-300 md:hidden"
+        data-mobile-menu
+      >
+        <a class="mobile-link" href="#overview">Système</a>
+        <a class="mobile-link" href="#excavation">Excavation</a>
+        <a class="mobile-link" href="#archive">Archive</a>
+        <a class="mobile-link text-bone" href="#video">Lancer le scan</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero-section archeo-hero" data-hero>
+        <div class="hero-atmosphere" aria-hidden="true"></div>
+        <div class="hero-topography" aria-hidden="true" data-parallax="0.05"></div>
+        <div class="hero-ruin" aria-hidden="true" data-parallax="0.09"></div>
+        <div class="grain-layer" aria-hidden="true"></div>
+
+        <div class="relative z-10 mx-auto grid min-h-svh max-w-[1440px] content-end gap-12 px-5 pb-8 pt-28 md:px-10 md:pb-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+          <div class="min-w-0">
+            <div class="mb-7 reveal-clip" data-clip>
+              <span class="tag">AI · LiDAR · Digital Heritage</span>
+            </div>
+
+            <h1 class="hero-title reveal-clip" data-clip>
+              <span>Decode the past.</span>
+              <span class="font-serif italic">Reconstruct the lost.</span>
+            </h1>
+
+            <p class="hero-lede reveal-up">
+              Archeo SIGNAL combines artificial intelligence, LiDAR mapping and 3D reconstruction to reveal fragile cultural memory before it disappears.
+            </p>
+          </div>
+
+          <aside class="hero-console reveal-up" data-tilt>
+            <div class="console-top">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="console-lock">
+              <span>Artifact signature</span>
+              <strong>FOUND</strong>
+            </div>
+            <p>Subsurface geometry detected. Reconstruction model ready for review.</p>
+            <div class="console-meter" aria-hidden="true">
+              <span></span>
+            </div>
+            <div class="console-actions">
+              <a class="btn btn-primary" href="#excavation">
+                Enter the excavation
+                <i data-lucide="arrow-down"></i>
+              </a>
+              <a class="btn btn-secondary" href="#archive">
+                View the archive
+                <i data-lucide="archive"></i>
+              </a>
+            </div>
+          </aside>
+
+          <div class="hero-dock lg:col-span-2">
+            <span class="reveal-up">LiDAR terrain</span>
+            <span class="reveal-up delay-100">Artifact AI</span>
+            <span class="reveal-up delay-200">3D archive</span>
+            <span class="reveal-up delay-300">Heritage lab</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="marquee-section" aria-label="Mots clés">
+        <div class="marquee-track">
+          <span>LiDAR · Ruins · Artifact Intelligence · Cultural Memory · Digital Excavation · Reconstruction · Archive · Preservation · </span>
+          <span aria-hidden="true">LiDAR · Ruins · Artifact Intelligence · Cultural Memory · Digital Excavation · Reconstruction · Archive · Preservation · </span>
+        </div>
+      </section>
+
+      <section id="overview" class="overview-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Archéo-tech overview</span>
+          <h2>An intelligent layer over ancient history.</h2>
+          <p>
+            A cinematic research interface for reading sites, objects and vanished structures through non-invasive sensing and precise digital interpretation.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="research-card reveal-up" data-tilt>
+            <i data-lucide="radar"></i>
+            <span>01</span>
+            <h3>LiDAR terrain scanning</h3>
+            <p>Map buried geometries, erosion marks and hidden urban traces without disturbing fragile ground.</p>
+          </article>
+          <article class="research-card reveal-up delay-100" data-tilt>
+            <i data-lucide="brain-circuit"></i>
+            <span>02</span>
+            <h3>Artifact intelligence</h3>
+            <p>Classify material signatures, surface damage, inscriptions and origin hypotheses through assisted analysis.</p>
+          </article>
+          <article class="research-card reveal-up delay-200" data-tilt>
+            <i data-lucide="box"></i>
+            <span>03</span>
+            <h3>3D preservation</h3>
+            <p>Turn fragmented evidence into accessible reconstructions for researchers, museums and future archives.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="excavation" class="excavation-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Digital excavation</span>
+          <h2>Excavate without touching the ground.</h2>
+        </div>
+
+        <div class="excavation-layout">
+          <div class="excavation-map reveal-up" aria-hidden="true">
+            <span class="map-pulse"></span>
+            <span class="map-point point-a"></span>
+            <span class="map-point point-b"></span>
+            <span class="map-point point-c"></span>
+            <span class="map-depth">DEPTH 04 / GRID E7</span>
+          </div>
+
+          <div class="data-stack">
+            <article class="data-panel reveal-up delay-100">
+              <span>Coordinate lock</span>
+              <strong>34.012N / 06.814E</strong>
+              <p>Subsurface anomalies align with an architectural foundation.</p>
+            </article>
+            <article class="data-panel reveal-up delay-200">
+              <span>Scan resolution</span>
+              <strong>2.8 cm</strong>
+              <p>Enough fidelity to identify walls, voids and fragile intervention zones.</p>
+            </article>
+            <article class="data-panel reveal-up delay-300">
+              <span>Preservation mode</span>
+              <strong>Non-invasive</strong>
+              <p>Research can begin before a single layer is physically displaced.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="video" class="video-section">
+        <div class="video-heading reveal-up">
+          <span class="tag">Field transmission</span>
+          <h2>The discovery film.</h2>
+        </div>
+
+        <div class="video-shell reveal-up" data-tilt>
+          <div class="video-frame">
+            <!-- TODO: remplacer VIDEO_ID par l'identifiant YouTube réel. -->
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/VIDEO_ID?rel=0&modestbranding=1"
+              title="Vidéo principale de Archeo SIGNAL"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <div class="video-placeholder" aria-hidden="true">
+              <i data-lucide="play-circle"></i>
+              <span>VIDEO_ID</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="intelligence-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Artifact intelligence</span>
+          <h2>From fragment to knowledge.</h2>
+        </div>
+
+        <div class="artifact-layout">
+          <div class="artifact-preview reveal-up" data-tilt>
+            <div class="artifact-stone" aria-hidden="true"></div>
+            <span>Fragment A-19</span>
+          </div>
+
+          <div class="analysis-grid">
+            <article class="analysis-panel reveal-up delay-100">
+              <span>Estimated Period</span>
+              <strong>Late Bronze Age</strong>
+            </article>
+            <article class="analysis-panel reveal-up delay-200">
+              <span>Material Signature</span>
+              <strong>Limestone / copper trace</strong>
+            </article>
+            <article class="analysis-panel reveal-up delay-300">
+              <span>Origin Hypothesis</span>
+              <strong>Ritual architecture</strong>
+            </article>
+            <article class="analysis-panel reveal-up delay-300">
+              <span>Reconstruction Confidence</span>
+              <strong>91%</strong>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="reconstruction-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">3D reconstruction</span>
+          <h2>Reconstruct what time erased.</h2>
+          <p>
+            Fragments, wall traces and damaged objects become spatial hypotheses: readable, reviewable and ready for museum-grade digital preservation.
+          </p>
+        </div>
+
+        <div class="reconstruction-stage reveal-up">
+          <div class="wire-temple" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="reconstruction-copy">
+            <span>Blueprint overlay 73%</span>
+            <strong>Missing volume reconstructed from preserved edges and LiDAR depth maps.</strong>
+          </div>
+        </div>
+      </section>
+
+      <section id="archive" class="archive-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Digital archive</span>
+          <h2>A museum database built like a cinematic interface.</h2>
+        </div>
+
+        <div class="archive-grid">
+          <article class="archive-card reveal-up" data-tilt>
+            <span>Obsidian Ritual Blade</span>
+            <strong>Scan complete</strong>
+            <p>Material: volcanic glass · Period: Classic era · Preservation: 88%</p>
+          </article>
+          <article class="archive-card reveal-up delay-100" data-tilt>
+            <span>Fragmented Temple Inscription</span>
+            <strong>Glyph recovery</strong>
+            <p>Material: sandstone · Location: upper terrace · Preservation: 74%</p>
+          </article>
+          <article class="archive-card reveal-up delay-200" data-tilt>
+            <span>Bronze Age Ceramic Vessel</span>
+            <strong>Reconstruction active</strong>
+            <p>Material: fired clay · Origin: coastal archive · Preservation: 91%</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="mission-section">
+        <div class="mission-inner reveal-up">
+          <span class="tag">Heritage preservation</span>
+          <h2>Preserving the signals of civilization.</h2>
+          <p>
+            Every artifact carries information from the past. Archeo SIGNAL helps researchers decode, preserve and share those signals before erosion, climate damage or conflict can erase them.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="cta-ghost" aria-hidden="true">ARCHEO</div>
+        <div class="relative z-10 mx-auto max-w-4xl px-5 text-center">
+          <span class="tag reveal-up">Final transmission</span>
+          <h2 class="cta-title reveal-up delay-100">
+            Reveal what time
+            <span class="font-serif italic">tried to bury.</span>
+          </h2>
+          <div class="mt-9 reveal-up delay-200">
+            <a class="btn btn-primary" href="#top">
+              Launch the scan
+              <i data-lucide="scan-line"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-line px-5 py-7 md:px-10">
+      <div class="mx-auto flex max-w-[1440px] flex-col gap-4 text-xs uppercase tracking-[0.18em] text-fog md:flex-row md:items-center md:justify-between">
+        <div class="brand normal-case tracking-normal">
+          <span class="font-serif text-xl italic">Archeo</span>
+          <span class="font-extrabold">SIGNAL</span>
+        </div>
+        <span>Digital Campus Paris · Challenge YouTube 2026</span>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

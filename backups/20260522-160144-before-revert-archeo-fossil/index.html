@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Archeo Signal - Landing page immersive pour une chaîne YouTube archéo-tech."
+    />
+    <meta property="og:title" content="Archeo Signal - Fossiles, ruines et scans" />
+    <meta
+      property="og:description"
+      content="Un espace sombre, interactif et centré sur la vidéo principale d'une chaîne archéo-tech."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#050813" />
+    <title>Archeo Signal - Fossiles, ruines et scans</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-ink text-bone antialiased">
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+
+    <header
+      id="site-nav"
+      class="fixed inset-x-0 top-0 z-50 border-b border-transparent px-5 py-4 transition duration-300 md:px-10"
+    >
+      <nav class="mx-auto flex max-w-[1440px] items-center justify-between gap-6">
+        <a href="#top" class="brand" aria-label="Retour en haut de page">
+          <span class="font-serif text-2xl italic leading-none">Archeo</span>
+          <span class="text-lg font-extrabold leading-none">SIGNAL</span>
+        </a>
+
+        <button
+          class="icon-btn md:hidden"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          data-menu-toggle
+        >
+          <span class="sr-only">Ouvrir le menu</span>
+          <i data-lucide="menu"></i>
+        </button>
+
+        <div class="hidden items-center gap-8 md:flex">
+          <a class="nav-link" href="#signal">Signal</a>
+          <a class="nav-link" href="#video">Vidéo</a>
+          <a class="nav-link" href="#shorts">Shorts</a>
+          <a class="btn btn-primary" href="https://youtube.com" target="_blank" rel="noopener">
+            S'abonner
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+        </div>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        class="pointer-events-none mx-auto mt-4 grid max-h-0 max-w-[1440px] gap-3 overflow-hidden opacity-0 transition-all duration-300 md:hidden"
+        data-mobile-menu
+      >
+        <a class="mobile-link" href="#signal">Signal</a>
+        <a class="mobile-link" href="#video">Vidéo</a>
+        <a class="mobile-link" href="#shorts">Shorts</a>
+        <a class="mobile-link text-bone" href="https://youtube.com" target="_blank" rel="noopener">S'abonner</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero-section cinematic-hero" data-cinematic-hero>
+        <div class="intro-webgl" aria-hidden="true">
+          <canvas id="hero-tunnel"></canvas>
+        </div>
+        <div class="intro-fallback" aria-hidden="true" data-parallax="0.035"></div>
+        <div class="intro-aura" aria-hidden="true"></div>
+        <div class="intro-scanline" aria-hidden="true"></div>
+        <div class="hero-vignette" aria-hidden="true"></div>
+        <div class="grain-layer"></div>
+
+        <div class="intro-boot" aria-hidden="true">
+          <div class="boot-core">
+            <span class="boot-ring"></span>
+            <span class="boot-ring"></span>
+            <span class="boot-ring"></span>
+            <span class="boot-core-line"></span>
+          </div>
+
+          <div class="boot-panel">
+            <div class="boot-header">
+              <span class="boot-kicker">Archeo Signal / FOSSIL RECOVERY</span>
+              <strong class="boot-counter" data-boot-counter>000%</strong>
+            </div>
+
+            <div class="boot-list">
+              <div class="boot-stage">
+                <span>01</span>
+                <strong>SITE GRID</strong>
+                <em>surveying</em>
+                <i class="stage-fill"></i>
+              </div>
+              <div class="boot-stage">
+                <span>02</span>
+                <strong>STONE ECHO</strong>
+                <em>sampling</em>
+                <i class="stage-fill"></i>
+              </div>
+              <div class="boot-stage">
+                <span>03</span>
+                <strong>LIDAR PASS</strong>
+                <em>mapping relief</em>
+                <i class="stage-fill"></i>
+              </div>
+              <div class="boot-stage">
+                <span>04</span>
+                <strong>ARCHIVE GATE</strong>
+                <em>opening</em>
+                <i class="stage-fill"></i>
+              </div>
+            </div>
+
+            <div class="boot-log">
+              <span>dust layer isolated</span>
+              <span>relief scan aligned</span>
+              <span>artifact contour stable</span>
+            </div>
+
+            <div class="boot-progress"><span></span></div>
+          </div>
+        </div>
+
+        <div class="intro-content relative z-10 mx-auto grid min-h-svh max-w-[1440px] content-end gap-10 px-5 pb-8 pt-28 md:px-10 md:pb-12 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-end">
+          <div class="intro-copy min-w-0">
+            <span class="tag">Fouille augmentée · Archéo-tech</span>
+            <h1 class="intro-title">
+              <span>Déterrer le</span>
+              <span class="font-serif italic">signal.</span>
+            </h1>
+            <p class="intro-lede">
+              Une chaîne qui explore fossiles, ruines et technologies de scan pour révéler ce que le passé laisse sous la surface.
+            </p>
+            <div class="intro-actions">
+              <a class="btn btn-primary" href="#video">
+                Lancer
+                <i data-lucide="play"></i>
+              </a>
+              <a class="btn btn-secondary" href="#signal">
+                Explorer
+                <i data-lucide="arrow-down"></i>
+              </a>
+            </div>
+          </div>
+
+          <aside class="intro-console" data-tilt>
+            <div class="console-top">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="console-lock">
+              <span>Fossil scan</span>
+              <strong>ACTIVE</strong>
+            </div>
+            <p>Relief stable. Archive prête. La couche fossile peut être révélée.</p>
+            <div class="console-meter" aria-hidden="true">
+              <span></span>
+            </div>
+            <div class="console-readout">
+              <span>LIDAR PASS</span>
+              <strong>60</strong>
+            </div>
+          </aside>
+
+          <div class="intro-dock lg:col-span-2">
+            <span>Fossile scan</span>
+            <span>LiDAR pass</span>
+            <span>Archive UI</span>
+            <span>Terrain ready</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="marquee-section" aria-label="Mots clés">
+        <div class="marquee-track">
+          <span>Fossiles · Ruines · LiDAR · Dinosaures · Archives · Reconstruction · Shorts · Décryptage · </span>
+          <span aria-hidden="true">Fossiles · Ruines · LiDAR · Dinosaures · Archives · Reconstruction · Shorts · Décryptage · </span>
+        </div>
+      </section>
+
+      <section id="signal" class="signal-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Méthode</span>
+          <h2>Des traces anciennes. Des preuves visibles.</h2>
+        </div>
+
+        <div class="signal-grid">
+          <article class="signal-card reveal-up" data-tilt>
+            <i data-lucide="cpu"></i>
+            <span>01</span>
+            <h3>Fouiller</h3>
+            <p>Un site, un fossile ou une trace, relevé en condition réelle.</p>
+          </article>
+          <article class="signal-card reveal-up delay-100" data-tilt>
+            <i data-lucide="radar"></i>
+            <span>02</span>
+            <h3>Scanner</h3>
+            <p>Ce que le LiDAR révèle, ce que l'image cache.</p>
+          </article>
+          <article class="signal-card reveal-up delay-200" data-tilt>
+            <i data-lucide="zap"></i>
+            <span>03</span>
+            <h3>Raconter</h3>
+            <p>Un récit court, visuel, mémorisable, partageable.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="video" class="video-section">
+        <div class="video-heading reveal-up">
+          <span class="tag">Vidéo principale</span>
+          <h2>La découverte centrale.</h2>
+        </div>
+
+        <div class="video-shell reveal-up" data-tilt>
+          <div class="video-frame">
+            <!-- TODO: remplacer VIDEO_ID par l'identifiant YouTube réel. -->
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/VIDEO_ID?rel=0&modestbranding=1"
+              title="Vidéo principale de Archeo Signal"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <div class="video-placeholder" aria-hidden="true">
+              <i data-lucide="play-circle"></i>
+              <span>VIDEO_ID</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="shorts" class="shorts-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Shorts</span>
+          <h2>Trois traces. Une seule révélation.</h2>
+        </div>
+
+        <div class="shorts-grid">
+          <article class="short-card group reveal-up" data-tilt>
+            <div class="short-visual">
+              <i data-lucide="smartphone"></i>
+            </div>
+            <div class="short-copy">
+              <span>#01</span>
+              <h3>Terrain</h3>
+            </div>
+          </article>
+          <article class="short-card group reveal-up delay-100 md:mt-12" data-tilt>
+            <div class="short-visual">
+              <i data-lucide="scan-eye"></i>
+            </div>
+            <div class="short-copy">
+              <span>#02</span>
+              <h3>Relief</h3>
+            </div>
+          </article>
+          <article class="short-card group reveal-up delay-200" data-tilt>
+            <div class="short-visual">
+              <i data-lucide="circuit-board"></i>
+            </div>
+            <div class="short-copy">
+              <span>#03</span>
+              <h3>Archive</h3>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="cta-ghost" aria-hidden="true">ARCHEO</div>
+        <div class="relative z-10 mx-auto max-w-4xl px-5 text-center">
+          <span class="tag reveal-up">Abonnement</span>
+          <h2 class="cta-title reveal-up delay-100">
+            Suivre les prochaines
+            <span class="font-serif italic">traces révélées.</span>
+          </h2>
+          <div class="mt-9 reveal-up delay-200">
+            <a class="btn btn-primary" href="https://youtube.com" target="_blank" rel="noopener">
+              Ouvrir YouTube
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-line px-5 py-7 md:px-10">
+      <div class="mx-auto flex max-w-[1440px] flex-col gap-4 text-xs uppercase tracking-[0.18em] text-fog md:flex-row md:items-center md:justify-between">
+        <div class="brand normal-case tracking-normal">
+          <span class="font-serif text-xl italic">Archeo</span>
+          <span class="font-extrabold">SIGNAL</span>
+        </div>
+        <span>Digital Campus Paris · Challenge YouTube 2026</span>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

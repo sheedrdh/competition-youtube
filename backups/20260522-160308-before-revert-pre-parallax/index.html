@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CHANNEL NAME - Landing page immersive pour une chaîne YouTube hi-tech."
+    />
+    <meta property="og:title" content="CHANNEL NAME - Tech utile, sans bruit" />
+    <meta
+      property="og:description"
+      content="Un espace sombre, interactif et centré sur la vidéo principale de la chaîne hi-tech."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#050813" />
+    <title>CHANNEL NAME - Tech utile, sans bruit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-ink text-bone antialiased">
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+
+    <header
+      id="site-nav"
+      class="fixed inset-x-0 top-0 z-50 border-b border-transparent px-5 py-4 transition duration-300 md:px-10"
+    >
+      <nav class="mx-auto flex max-w-[1440px] items-center justify-between gap-6">
+        <a href="#top" class="brand" aria-label="Retour en haut de page">
+          <span class="font-serif text-2xl italic leading-none">Channel</span>
+          <span class="text-lg font-extrabold leading-none">NAME</span>
+        </a>
+
+        <button
+          class="icon-btn md:hidden"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          data-menu-toggle
+        >
+          <span class="sr-only">Ouvrir le menu</span>
+          <i data-lucide="menu"></i>
+        </button>
+
+        <div class="hidden items-center gap-8 md:flex">
+          <a class="nav-link" href="#signal">Signal</a>
+          <a class="nav-link" href="#video">Vidéo</a>
+          <a class="nav-link" href="#shorts">Shorts</a>
+          <a class="btn btn-primary" href="https://youtube.com" target="_blank" rel="noopener">
+            S'abonner
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+        </div>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        class="pointer-events-none mx-auto mt-4 grid max-h-0 max-w-[1440px] gap-3 overflow-hidden opacity-0 transition-all duration-300 md:hidden"
+        data-mobile-menu
+      >
+        <a class="mobile-link" href="#signal">Signal</a>
+        <a class="mobile-link" href="#video">Vidéo</a>
+        <a class="mobile-link" href="#shorts">Shorts</a>
+        <a class="mobile-link text-bone" href="https://youtube.com" target="_blank" rel="noopener">S'abonner</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero-section">
+        <div class="hero-webgl" aria-hidden="true">
+          <canvas id="hero-tunnel"></canvas>
+        </div>
+        <div class="hero-fallback-grid" aria-hidden="true" data-parallax="0.04"></div>
+        <div class="hero-vignette" aria-hidden="true"></div>
+        <div class="grain-layer"></div>
+
+        <div class="relative z-10 mx-auto grid min-h-svh max-w-[1440px] content-end gap-12 px-5 pb-8 pt-28 md:px-10 md:pb-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+          <div class="min-w-0">
+            <div class="mb-7 reveal-clip" data-clip>
+              <span class="tag">Data tunnel · Hi-tech général</span>
+            </div>
+
+            <h1 class="hero-title reveal-clip" data-clip>
+              <span>Entrer dans</span>
+              <span class="font-serif italic">le signal.</span>
+            </h1>
+          </div>
+
+          <aside class="hero-console reveal-up" data-tilt>
+            <div class="console-top">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="console-lock">
+              <span>Signal locked</span>
+              <strong>99.8%</strong>
+            </div>
+            <p>Tests, usages, verdicts. Une chaîne pour comprendre ce qui vaut vraiment l'attention.</p>
+            <div class="console-meter" aria-hidden="true">
+              <span></span>
+            </div>
+            <div class="console-actions">
+              <a class="btn btn-primary" href="#video">
+                Lancer
+                <i data-lucide="play"></i>
+              </a>
+              <a class="btn btn-secondary" href="#signal">
+                Explorer
+                <i data-lucide="arrow-down"></i>
+              </a>
+            </div>
+          </aside>
+
+          <div class="hero-dock lg:col-span-2">
+            <span class="reveal-up">WebGL</span>
+            <span class="reveal-up delay-100">Tunnel data</span>
+            <span class="reveal-up delay-200">3-4 min</span>
+            <span class="reveal-up delay-300">Shorts</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="marquee-section" aria-label="Mots clés">
+        <div class="marquee-track">
+          <span>Tests · Usages · IA · Gadgets · Smartphones · Verdicts · Shorts · Décryptage · </span>
+          <span aria-hidden="true">Tests · Usages · IA · Gadgets · Smartphones · Verdicts · Shorts · Décryptage · </span>
+        </div>
+      </section>
+
+      <section id="signal" class="signal-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Signal</span>
+          <h2>Peu de texte. Des preuves rapides.</h2>
+        </div>
+
+        <div class="signal-grid">
+          <article class="signal-card reveal-up" data-tilt>
+            <i data-lucide="cpu"></i>
+            <span>01</span>
+            <h3>Tester</h3>
+            <p>Un objet ou une tendance, vu en condition réelle.</p>
+          </article>
+          <article class="signal-card reveal-up delay-100" data-tilt>
+            <i data-lucide="radar"></i>
+            <span>02</span>
+            <h3>Comparer</h3>
+            <p>Ce qui change vraiment, ce qui sonne creux.</p>
+          </article>
+          <article class="signal-card reveal-up delay-200" data-tilt>
+            <i data-lucide="zap"></i>
+            <span>03</span>
+            <h3>Trancher</h3>
+            <p>Un verdict simple, mémorisable, partageable.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="video" class="video-section">
+        <div class="video-heading reveal-up">
+          <span class="tag">Vidéo principale</span>
+          <h2>Le centre de gravité.</h2>
+        </div>
+
+        <div class="video-shell reveal-up" data-tilt>
+          <div class="video-frame">
+            <!-- TODO: remplacer VIDEO_ID par l'identifiant YouTube réel. -->
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/VIDEO_ID?rel=0&modestbranding=1"
+              title="Vidéo principale de CHANNEL NAME"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <div class="video-placeholder" aria-hidden="true">
+              <i data-lucide="play-circle"></i>
+              <span>VIDEO_ID</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="shorts" class="shorts-section">
+        <div class="section-intro reveal-up">
+          <span class="tag">Shorts</span>
+          <h2>Trois angles. Une seule impulsion.</h2>
+        </div>
+
+        <div class="shorts-grid">
+          <article class="short-card group reveal-up" data-tilt>
+            <div class="short-visual">
+              <i data-lucide="smartphone"></i>
+            </div>
+            <div class="short-copy">
+              <span>#01</span>
+              <h3>Démo</h3>
+            </div>
+          </article>
+          <article class="short-card group reveal-up delay-100 md:mt-12" data-tilt>
+            <div class="short-visual">
+              <i data-lucide="scan-eye"></i>
+            </div>
+            <div class="short-copy">
+              <span>#02</span>
+              <h3>Détail</h3>
+            </div>
+          </article>
+          <article class="short-card group reveal-up delay-200" data-tilt>
+            <div class="short-visual">
+              <i data-lucide="circuit-board"></i>
+            </div>
+            <div class="short-copy">
+              <span>#03</span>
+              <h3>Verdict</h3>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="cta-ghost" aria-hidden="true">CHANNEL</div>
+        <div class="relative z-10 mx-auto max-w-4xl px-5 text-center">
+          <span class="tag reveal-up">Abonnement</span>
+          <h2 class="cta-title reveal-up delay-100">
+            Suivre les prochains
+            <span class="font-serif italic">signaux tech.</span>
+          </h2>
+          <div class="mt-9 reveal-up delay-200">
+            <a class="btn btn-primary" href="https://youtube.com" target="_blank" rel="noopener">
+              Ouvrir YouTube
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-line px-5 py-7 md:px-10">
+      <div class="mx-auto flex max-w-[1440px] flex-col gap-4 text-xs uppercase tracking-[0.18em] text-fog md:flex-row md:items-center md:justify-between">
+        <div class="brand normal-case tracking-normal">
+          <span class="font-serif text-xl italic">Channel</span>
+          <span class="font-extrabold">NAME</span>
+        </div>
+        <span>Digital Campus Paris · Challenge YouTube 2026</span>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

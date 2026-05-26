@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CHANNEL NAME — Une chaîne YouTube qui redéfinit votre thématique.">
+<title>CHANNEL NAME</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --bg-2: #111111;
+    --fg: #f0ede8;
+    --muted: #5a5a5a;
+    --muted-light: #888;
+    --border: rgba(240,237,232,0.1);
+    --border-strong: rgba(240,237,232,0.28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── GRAIN ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.35;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  }
+
+  /* ── CURSOR ── */
+  #cursor {
+    width: 9px; height: 9px;
+    background: var(--fg);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: width .2s, height .2s, opacity .2s, background .2s;
+  }
+  #cursor-ring {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(240,237,232,0.35);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: width .3s, height .3s, border-color .3s;
+  }
+  body.cursor-hover #cursor { width: 22px; height: 22px; opacity: 0.5; }
+  body.cursor-hover #cursor-ring { width: 54px; height: 54px; border-color: rgba(240,237,232,0.55); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 500;
+    padding: 1.5rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background .4s, border-color .4s;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled {
+    background: rgba(12,12,12,0.82);
+    backdrop-filter: blur(18px);
+    border-color: var(--border);
+  }
+  nav a { cursor: none; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2rem 3rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  #hero-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 70% at 20% 60%, rgba(255,255,255,0.025) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  #hero-bg-num {
+    position: absolute;
+    top: 50%; right: -2%;
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: clamp(220px, 38vw, 560px);
+    line-height: 1; letter-spacing: -0.05em;
+    color: rgba(240,237,232,0.032);
+    transform: translateY(-50%);
+    pointer-events: none; user-select: none;
+    will-change: transform;
+  }
+  .hero-title {
+    font-size: clamp(3.8rem, 10.5vw, 9.5rem);
+    font-weight: 800;
+    line-height: 0.93;
+    letter-spacing: -0.04em;
+  }
+  .hero-title .alt {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── CLIP REVEAL ── */
+  .cr { overflow: hidden; display: block; }
+  .cr span {
+    display: block;
+    transform: translateY(105%);
+    transition: transform 1s cubic-bezier(0.16,1,0.3,1);
+  }
+  .cr.in span { transform: translateY(0); }
+
+  /* ── SCROLL REVEAL ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(38px);
+    transition: opacity .85s cubic-bezier(0.16,1,0.3,1),
+                transform .85s cubic-bezier(0.16,1,0.3,1);
+  }
+  .fade-up.in { opacity: 1; transform: translateY(0); }
+  .delay-1 { transition-delay: .1s !important; }
+  .delay-2 { transition-delay: .2s !important; }
+  .delay-3 { transition-delay: .3s !important; }
+  .delay-4 { transition-delay: .4s !important; }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    padding: .28rem .75rem;
+    border: 1px solid rgba(240,237,232,0.2);
+    font-size: .68rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted-light);
+  }
+
+  /* ── BUTTONS ── */
+  .btn-solid {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .8rem 2rem;
+    background: var(--fg);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: .75rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity .2s;
+    cursor: none;
+  }
+  .btn-solid:hover { opacity: .8; }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .8rem 2rem;
+    border: 1px solid var(--border-strong);
+    color: var(--fg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 500; font-size: .75rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    text-decoration: none;
+    transition: background .2s, border-color .2s;
+    cursor: none;
+  }
+  .btn-outline:hover {
+    background: rgba(240,237,232,0.07);
+    border-color: rgba(240,237,232,0.55);
+  }
+
+  /* ── VIDEO EMBED ── */
+  .video-ratio {
+    position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+  }
+  .video-ratio iframe {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+  }
+
+  /* ── SHORT CARD ── */
+  .short-card {
+    position: relative;
+    aspect-ratio: 9/16;
+    background: #161616;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color .3s;
+  }
+  .short-card:hover { border-color: rgba(240,237,232,0.35); }
+  .short-card-overlay {
+    position: absolute; inset: 0; z-index: 2;
+    background: rgba(12,12,12,0.55);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity .3s;
+  }
+  .short-card:hover .short-card-overlay { opacity: 1; }
+  .short-card-info {
+    position: absolute; inset: 0; z-index: 3;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 1.25rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
+  }
+  .short-placeholder {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── STATS ROW ── */
+  .stat-val {
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: .65rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: .35rem;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-track {
+    display: flex; white-space: nowrap;
+    animation: marquee 22s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: .72rem; color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="nav">
+  <a href="#" style="text-decoration:none; color:var(--fg);">
+    <span style="font-family:'Instrument Serif',serif; font-style:italic; font-size:1.25rem; letter-spacing:-.02em;">Channel</span><span style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.05rem; letter-spacing:-.02em;">NAME</span>
+  </a>
+  <div style="display:flex; align-items:center; gap:2.5rem;">
+    <a href="#concept" style="font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-light); text-decoration:none; cursor:none; transition:color .2s;" onmouseenter="this.style.color='var(--fg)'" onmouseleave="this.style.color='var(--muted-light)'">Concept</a>
+    <a href="#video" style="font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-light); text-decoration:none; cursor:none; transition:color .2s;" onmouseenter="this.style.color='var(--fg)'" onmouseleave="this.style.color='var(--muted-light)'">Vidéo</a>
+    <a href="#shorts" style="font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-light); text-decoration:none; cursor:none; transition:color .2s;" onmouseenter="this.style.color='var(--fg)'" onmouseleave="this.style.color='var(--muted-light)'">Shorts</a>
+    <a href="https://youtube.com" class="btn-solid" target="_blank" rel="noopener">
+      S'abonner
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 10.5L10.5 1.5M10.5 1.5H4.5M10.5 1.5V7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero" id="home">
+  <div id="hero-glow"></div>
+  <div id="hero-bg-num">01</div>
+
+  <div style="position:relative; z-index:1; max-width:1300px;">
+
+    <!-- label -->
+    <div class="cr" id="cr-tag" style="margin-bottom:2rem;">
+      <span><span class="tag">Chaîne YouTube · 2026 · Digital Campus Paris</span></span>
+    </div>
+
+    <!-- main title -->
+    <h1 class="hero-title">
+      <div class="cr" id="cr-0"><span>Votre titre</span></div>
+      <div class="cr" id="cr-1"><span><span class="alt">de chaîne</span></span></div>
+      <div class="cr" id="cr-2"><span>ici.</span></div>
+    </h1>
+
+    <!-- sub row -->
+    <div style="margin-top:3.5rem; display:flex; align-items:flex-start; gap:4rem; flex-wrap:wrap;">
+      <p style="max-width:380px; color:var(--muted-light); line-height:1.75; font-size:.95rem;" class="cr" id="cr-sub">
+        <span>Description de votre concept de chaîne. Ce que vous créez, pourquoi, et pour qui. Une accroche courte et percutante suffit.</span>
+      </p>
+      <div class="cr" id="cr-btns" style="display:flex; gap:1rem; align-items:center; padding-top:.25rem;">
+        <span>
+          <a href="#video" class="btn-solid">
+            Voir la vidéo
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://youtube.com" class="btn-outline" target="_blank" rel="noopener" style="margin-left:1rem;">Chaîne YT</a>
+        </span>
+      </div>
+    </div>
+
+    <!-- stats -->
+    <div style="margin-top:6rem; display:flex; align-items:flex-end; justify-content:space-between; border-top:1px solid var(--border); padding-top:2rem; flex-wrap:wrap; gap:2rem;" class="fade-up">
+      <div style="display:flex; gap:5rem; flex-wrap:wrap;">
+        <div>
+          <div class="stat-val">3–4<span style="font-size:1rem; font-weight:400; color:var(--muted);"> min</span></div>
+          <div class="stat-label">Vidéo principale</div>
+        </div>
+        <div>
+          <div class="stat-val">3<span style="font-size:1rem; font-weight:400; color:var(--muted);"> shorts</span></div>
+          <div class="stat-label">Contenus courts</div>
+        </div>
+        <div>
+          <div class="stat-val">Mai<span style="font-size:1rem; font-weight:400; color:var(--muted);"> 2026</span></div>
+          <div class="stat-label">Date de publication</div>
+        </div>
+      </div>
+      <div style="font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:.75rem;">
+        <span style="display:block; width:36px; height:1px; background:var(--muted);"></span>
+        Scroll pour découvrir
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════ MARQUEE ═══════════ -->
+<div style="overflow:hidden; border-bottom:1px solid var(--border); padding:.75rem 0; background:var(--bg-2);">
+  <div class="marquee-track">
+    <span style="font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted);">
+      Chaîne YouTube &nbsp;·&nbsp; Vidéo principale &nbsp;·&nbsp; 3 Shorts &nbsp;·&nbsp; Parallax &nbsp;·&nbsp; Tailwind CSS &nbsp;·&nbsp; Digital Campus Paris &nbsp;·&nbsp; Bachelor 1 &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; Chaîne YouTube &nbsp;·&nbsp; Vidéo principale &nbsp;·&nbsp; 3 Shorts &nbsp;·&nbsp; Parallax &nbsp;·&nbsp; Tailwind CSS &nbsp;·&nbsp; Digital Campus Paris &nbsp;·&nbsp; Bachelor 1 &nbsp;·&nbsp; 2026 &nbsp;·&nbsp;&nbsp;
+    </span>
+    <span aria-hidden="true" style="font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted);">
+      Chaîne YouTube &nbsp;·&nbsp; Vidéo principale &nbsp;·&nbsp; 3 Shorts &nbsp;·&nbsp; Parallax &nbsp;·&nbsp; Tailwind CSS &nbsp;·&nbsp; Digital Campus Paris &nbsp;·&nbsp; Bachelor 1 &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; Chaîne YouTube &nbsp;·&nbsp; Vidéo principale &nbsp;·&nbsp; 3 Shorts &nbsp;·&nbsp; Parallax &nbsp;·&nbsp; Tailwind CSS &nbsp;·&nbsp; Digital Campus Paris &nbsp;·&nbsp; Bachelor 1 &nbsp;·&nbsp; 2026 &nbsp;·&nbsp;&nbsp;
+    </span>
+  </div>
+</div>
+
+<!-- ═══════════ CONCEPT ═══════════ -->
+<section id="concept" style="padding:9rem 3rem; max-width:1300px; margin:0 auto;">
+  <div style="display:grid; grid-template-columns:1fr 2.2fr; gap:8rem; align-items:start;">
+
+    <!-- left col -->
+    <div class="fade-up">
+      <span class="tag">01 — Concept</span>
+      <div style="width:100%; height:1px; background:var(--border); margin-top:2rem;"></div>
+      <p style="margin-top:2rem; font-size:.78rem; line-height:2; color:var(--muted); letter-spacing:.03em;">
+        Benchmark réalisé sur les principales chaînes de votre thématique. Opportunité de concept identifiée.
+      </p>
+    </div>
+
+    <!-- right col -->
+    <div>
+      <h2 class="fade-up" style="font-size:clamp(2.5rem,5.5vw,5rem); font-weight:800; letter-spacing:-.04em; line-height:.95; margin-bottom:3.5rem;">
+        Ce que<br>nous <span style="font-family:'Instrument Serif',serif; font-style:italic; font-weight:400;">créons</span><br>pour vous.
+      </h2>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem;">
+        <div class="fade-up delay-1">
+          <div style="font-size:.65rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;">Notre thématique</div>
+          <p style="font-size:.9rem; line-height:1.85; color:rgba(240,237,232,0.7);">
+            Décrivez ici votre thématique tirée au sort et pourquoi vous l'avez choisie. Ce qui la rend pertinente aujourd'hui.
+          </p>
+        </div>
+        <div class="fade-up delay-2">
+          <div style="font-size:.65rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;">Notre ligne éditoriale</div>
+          <p style="font-size:.9rem; line-height:1.85; color:rgba(240,237,232,0.7);">
+            Ton, style visuel, vocabulaire et spécificités de votre chaîne. Ce qui vous différencie des autres créateurs.
+          </p>
+        </div>
+        <div class="fade-up delay-1" style="grid-column:1/-1; padding-top:2rem; border-top:1px solid var(--border);">
+          <div style="font-size:.65rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;">Notre cible</div>
+          <p style="font-size:.9rem; line-height:1.85; color:rgba(240,237,232,0.7); max-width:520px;">
+            Décrivez votre audience cible selon des critères autres que l'âge : centres d'intérêt, comportements, modes de vie, valeurs.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════ FEATURED VIDEO ═══════════ -->
+<section id="video" style="padding:9rem 3rem; background:var(--bg-2);">
+  <div style="max-width:1300px; margin:0 auto;">
+
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:4rem; flex-wrap:wrap; gap:2rem;">
+      <div class="fade-up">
+        <span class="tag">02 — Vidéo principale</span>
+        <h2 style="font-size:clamp(2.5rem,5vw,4.5rem); font-weight:800; letter-spacing:-.04em; line-height:.95; margin-top:1.5rem;">
+          Le titre de<br>votre <span style="font-family:'Instrument Serif',serif; font-style:italic; font-weight:400;">vidéo.</span>
+        </h2>
+      </div>
+      <p class="fade-up delay-1" style="max-width:300px; font-size:.88rem; color:var(--muted-light); line-height:1.75; text-align:right;">
+        Description courte de votre angle vidéo et du sujet traité. Accrochez le visiteur en quelques mots.
+      </p>
+    </div>
+
+    <!-- embed -->
+    <div class="fade-up" style="border:1px solid var(--border);">
+      <div class="video-ratio">
+        <!-- ↓ Remplacez VIDEO_ID par l'ID YouTube de votre vidéo -->
+        <iframe
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&color=white&modestbranding=1"
+          title="Vidéo principale de la chaîne"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- video meta -->
+    <div class="fade-up delay-1" style="display:flex; gap:4rem; margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border); flex-wrap:wrap; align-items:center; justify-content:space-between;">
+      <div style="display:flex; gap:4rem; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:.63rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);">Durée</div>
+          <div style="font-size:1.05rem; font-weight:700; margin-top:.4rem;">3 – 4 min</div>
+        </div>
+        <div>
+          <div style="font-size:.63rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);">Format</div>
+          <div style="font-size:1.05rem; font-weight:700; margin-top:.4rem;">Smartphone</div>
+        </div>
+        <div>
+          <div style="font-size:.63rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);">Contrainte technique</div>
+          <div style="font-size:1.05rem; font-weight:700; margin-top:.4rem;">À définir</div>
+        </div>
+      </div>
+      <a href="https://youtube.com" class="btn-outline" target="_blank" rel="noopener">
+        Voir sur YouTube
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 10.5L10.5 1.5M10.5 1.5H4.5M10.5 1.5V7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════ SHORTS ═══════════ -->
+<section id="shorts" style="padding:9rem 3rem;">
+  <div style="max-width:1300px; margin:0 auto;">
+
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:5rem; flex-wrap:wrap; gap:2rem;">
+      <div class="fade-up">
+        <span class="tag">03 — Shorts</span>
+        <h2 style="font-size:clamp(2.5rem,5vw,4.5rem); font-weight:800; letter-spacing:-.04em; line-height:.95; margin-top:1.5rem;">
+          Contenus<br><span style="font-family:'Instrument Serif',serif; font-style:italic; font-weight:400;">courts.</span>
+        </h2>
+      </div>
+      <p class="fade-up delay-1" style="max-width:280px; font-size:.88rem; color:var(--muted-light); line-height:1.75; text-align:right;">
+        2 à 3 shorts pour prolonger l'expérience — extraits buzz, teasers, backstages ou contenus exclusifs.
+      </p>
+    </div>
+
+    <!-- 3 shorts grid (staggered) -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; align-items:start;">
+
+      <!-- Short 1 – flush top -->
+      <div class="short-card fade-up">
+        <div class="short-placeholder">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="opacity:.12;"><rect width="36" height="36" rx="4" fill="white"/><path d="M14 10l12 8-12 8V10z" fill="#0c0c0c"/></svg>
+        </div>
+        <div class="short-card-overlay">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="25" stroke="white" stroke-opacity=".5" stroke-width="1"/><path d="M22 18l14 8-14 8V18z" fill="white"/></svg>
+        </div>
+        <div class="short-card-info">
+          <span class="tag" style="font-size:.58rem; display:inline-block; margin-bottom:.5rem;">#short 01</span>
+          <div style="font-weight:700; font-size:.9rem; line-height:1.3;">Titre du Short 1</div>
+          <div style="font-size:.72rem; color:var(--muted-light); margin-top:.3rem;">Teaser · Extrait</div>
+        </div>
+      </div>
+
+      <!-- Short 2 – offset down -->
+      <div class="short-card fade-up delay-1" style="margin-top:4rem;">
+        <div class="short-placeholder">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="opacity:.12;"><rect width="36" height="36" rx="4" fill="white"/><path d="M14 10l12 8-12 8V10z" fill="#0c0c0c"/></svg>
+        </div>
+        <div class="short-card-overlay">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="25" stroke="white" stroke-opacity=".5" stroke-width="1"/><path d="M22 18l14 8-14 8V18z" fill="white"/></svg>
+        </div>
+        <div class="short-card-info">
+          <span class="tag" style="font-size:.58rem; display:inline-block; margin-bottom:.5rem;">#short 02</span>
+          <div style="font-weight:700; font-size:.9rem; line-height:1.3;">Titre du Short 2</div>
+          <div style="font-size:.72rem; color:var(--muted-light); margin-top:.3rem;">Contenu exclusif</div>
+        </div>
+      </div>
+
+      <!-- Short 3 – flush top again -->
+      <div class="short-card fade-up delay-2">
+        <div class="short-placeholder">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="opacity:.12;"><rect width="36" height="36" rx="4" fill="white"/><path d="M14 10l12 8-12 8V10z" fill="#0c0c0c"/></svg>
+        </div>
+        <div class="short-card-overlay">
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="25" stroke="white" stroke-opacity=".5" stroke-width="1"/><path d="M22 18l14 8-14 8V18z" fill="white"/></svg>
+        </div>
+        <div class="short-card-info">
+          <span class="tag" style="font-size:.58rem; display:inline-block; margin-bottom:.5rem;">#short 03</span>
+          <div style="font-weight:700; font-size:.9rem; line-height:1.3;">Titre du Short 3</div>
+          <div style="font-size:.72rem; color:var(--muted-light); margin-top:.3rem;">Backstage</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section style="padding:11rem 3rem; text-align:center; position:relative; overflow:hidden;">
+  <!-- ghost bg text -->
+  <div aria-hidden="true" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; overflow:hidden;">
+    <div style="font-size:clamp(5rem,22vw,20rem); font-weight:800; letter-spacing:-.06em; color:rgba(240,237,232,0.028); white-space:nowrap; font-family:'Syne',sans-serif;">SUBSCRIBE</div>
+  </div>
+  <div style="position:relative; z-index:1;">
+    <div class="fade-up"><span class="tag">04 — Rejoignez-nous</span></div>
+    <h2 class="fade-up delay-1" style="font-size:clamp(3rem,8vw,7rem); font-weight:800; letter-spacing:-.04em; line-height:.92; margin:2rem auto 2.5rem; max-width:800px;">
+      Abonnez-vous<br>à la <span style="font-family:'Instrument Serif',serif; font-style:italic; font-weight:400;">chaîne.</span>
+    </h2>
+    <p class="fade-up delay-2" style="font-size:.95rem; color:var(--muted-light); max-width:380px; margin:0 auto 3rem; line-height:1.75;">
+      Ne ratez aucune vidéo. Rejoignez la communauté et suivez tous nos contenus.
+    </p>
+    <div class="fade-up delay-3">
+      <a href="https://youtube.com" class="btn-solid" target="_blank" rel="noopener" style="font-size:.8rem;">
+        S'abonner sur YouTube
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 12.5L12.5 1.5M12.5 1.5H4.5M12.5 1.5V9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div>
+    <span style="font-family:'Instrument Serif',serif; font-style:italic; font-size:1.05rem; color:var(--fg);">Channel</span><span style="font-family:'Syne',sans-serif; font-weight:800; font-size:.9rem; color:var(--fg);">NAME</span>
+  </div>
+  <div style="display:flex; gap:2.5rem; font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;">
+    <span>Digital Campus Paris</span>
+    <span>Bachelor 1</span>
+    <span>2026</span>
+  </div>
+  <div style="font-size:.65rem; letter-spacing:.08em;">Tous droits réservés © 2026</div>
+</footer>
+
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+(function() {
+
+  /* ── Custom cursor ── */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  (function animateRing() {
+    rx += (mx - rx) * 0.09;
+    ry += (my - ry) * 0.09;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  /* ── Navbar on scroll ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+
+  /* ── Parallax on hero ── */
+  const heroBgNum = document.getElementById('hero-bg-num');
+  const heroGlow  = document.getElementById('hero-glow');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (heroBgNum) heroBgNum.style.transform = `translateY(calc(-50% + ${y * 0.18}px))`;
+    if (heroGlow)  heroGlow.style.transform  = `translateY(${y * 0.12}px)`;
+  }, { passive: true });
+
+  /* ── Hero clip reveals (on load) ── */
+  const clipDelays = { 'cr-tag': 80, 'cr-0': 200, 'cr-1': 340, 'cr-2': 480, 'cr-sub': 560, 'cr-btns': 640 };
+  Object.entries(clipDelays).forEach(([id, delay]) => {
+    const el = document.getElementById(id);
+    if (el) setTimeout(() => el.classList.add('in'), delay);
+  });
+
+  /* ── Scroll-triggered fade-up reveals ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -70px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+})();
+</script>
+</body>
+</html>

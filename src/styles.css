@@ -1,0 +1,1034 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --sand-line: rgba(215, 170, 102, 0.16);
+    --holo-line: rgba(103, 240, 231, 0.17);
+    --intro-scroll: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-width: 320px;
+    overflow-x: hidden;
+    font-family: theme("fontFamily.sans");
+    background:
+      radial-gradient(circle at 15% 0%, rgba(200, 143, 74, 0.11), transparent 28rem),
+      radial-gradient(circle at 84% 8%, rgba(103, 240, 231, 0.075), transparent 32rem),
+      linear-gradient(180deg, #080604 0%, #100b07 42rem, #080604 100%);
+  }
+
+  ::selection {
+    background: theme("colors.signal");
+    color: theme("colors.ink");
+  }
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+@layer components {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: none;
+  }
+
+  #cursor-dot,
+  #cursor-ring {
+    @apply pointer-events-none fixed left-0 top-0 z-[120] hidden rounded-full md:block;
+    translate: -50% -50%;
+  }
+
+  #cursor-dot {
+    @apply h-2.5 w-2.5 bg-cyan transition-[width,height,opacity,background-color] duration-200;
+  }
+
+  #cursor-ring {
+    @apply h-10 w-10 border border-signal/50 transition-[width,height,border-color] duration-300;
+  }
+
+  .cursor-active #cursor-dot {
+    @apply h-5 w-5 bg-signal opacity-70;
+  }
+
+  .cursor-active #cursor-ring {
+    @apply h-14 w-14 border-cyan/70;
+  }
+
+  body.intro-running:not(.intro-complete) #cursor-dot,
+  body.intro-running:not(.intro-complete) #cursor-ring {
+    @apply opacity-0;
+  }
+
+  .intro-chamber {
+    @apply fixed inset-0 z-[100] overflow-hidden bg-black text-bone;
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0.9s;
+  }
+
+  .intro-chamber.is-complete {
+    @apply pointer-events-none invisible opacity-0;
+  }
+
+  #intro-canvas,
+  .intro-darkness,
+  .intro-stone,
+  .intro-fog,
+  .intro-grain,
+  .intro-inscriptions,
+  .intro-artifact-stage,
+  .intro-transition {
+    @apply pointer-events-none absolute inset-0;
+  }
+
+  #intro-canvas {
+    @apply h-full w-full opacity-95;
+  }
+
+  .intro-darkness {
+    background:
+      radial-gradient(circle at 50% 74%, rgba(200, 143, 74, 0.2), transparent 19rem),
+      radial-gradient(circle at 78% 46%, rgba(103, 240, 231, 0.065), transparent 22rem),
+      radial-gradient(circle at 20% 30%, rgba(97, 53, 22, 0.24), transparent 18rem),
+      linear-gradient(180deg, #020100 0%, #080503 46%, #0f0904 100%);
+  }
+
+  .intro-darkness::before,
+  .intro-darkness::after {
+    content: "";
+    @apply absolute inset-0;
+  }
+
+  .intro-darkness::before {
+    background:
+      linear-gradient(112deg, transparent 0 38%, rgba(230, 159, 80, 0.12) 48%, transparent 63%),
+      radial-gradient(ellipse at 51% 80%, rgba(232, 154, 69, 0.22), transparent 34rem);
+    filter: blur(18px);
+    opacity: 0.68;
+    animation: torchPulse 5.8s ease-in-out infinite;
+  }
+
+  .intro-darkness::after {
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.86), transparent 25%, transparent 72%, rgba(0, 0, 0, 0.82)),
+      radial-gradient(ellipse at center, transparent 0 42%, rgba(0, 0, 0, 0.84) 100%);
+  }
+
+  .intro-stone {
+    opacity: 0;
+    background-image:
+      radial-gradient(circle at 20% 28%, rgba(245, 218, 170, 0.15) 0 1px, transparent 2px),
+      radial-gradient(circle at 74% 54%, rgba(88, 49, 24, 0.3), transparent 18rem),
+      radial-gradient(circle at 40% 82%, rgba(208, 138, 60, 0.18), transparent 24rem),
+      repeating-linear-gradient(8deg, rgba(224, 173, 104, 0.05) 0 1px, transparent 1px 13px),
+      repeating-linear-gradient(96deg, rgba(255, 229, 180, 0.03) 0 1px, transparent 1px 22px);
+    background-size: 190px 190px, auto, auto, auto, auto;
+    mix-blend-mode: screen;
+    mask-image: radial-gradient(ellipse at 50% 56%, black 0%, black 52%, transparent 82%);
+    transform-origin: center;
+  }
+
+  .intro-stone::before {
+    content: "";
+    @apply absolute inset-0;
+    background:
+      linear-gradient(132deg, transparent 0 47%, rgba(34, 17, 8, 0.55) 47.2% 47.7%, transparent 48%),
+      linear-gradient(26deg, transparent 0 56%, rgba(34, 17, 8, 0.4) 56.3% 56.7%, transparent 57%),
+      linear-gradient(90deg, transparent 0 17%, rgba(229, 175, 101, 0.1) 17.2% 17.4%, transparent 17.6% 39%, rgba(229, 175, 101, 0.08) 39.2% 39.4%, transparent 39.6%),
+      linear-gradient(0deg, transparent 0 28%, rgba(229, 175, 101, 0.08) 28.2% 28.4%, transparent 28.6% 64%, rgba(229, 175, 101, 0.07) 64.2% 64.4%, transparent 64.6%);
+    opacity: 0.72;
+  }
+
+  .intro-fog {
+    background:
+      radial-gradient(ellipse at 48% 76%, rgba(202, 137, 66, 0.22), transparent 32rem),
+      radial-gradient(ellipse at 62% 36%, rgba(98, 67, 39, 0.16), transparent 30rem),
+      linear-gradient(180deg, transparent, rgba(12, 7, 3, 0.52));
+    filter: blur(12px);
+    opacity: 0.8;
+    transform: translate3d(-3%, 2%, 0) scale(1.08);
+    animation: fogDrift 11s ease-in-out infinite alternate;
+  }
+
+  .intro-grain,
+  .grain-layer {
+    @apply opacity-35 mix-blend-soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.13'/%3E%3C/svg%3E");
+  }
+
+  .intro-inscriptions {
+    @apply z-10 select-none overflow-hidden;
+    font-family: theme("fontFamily.serif");
+    color: rgba(243, 208, 154, 0.2);
+    text-shadow:
+      0 0 20px rgba(200, 143, 74, 0.22),
+      0 0 60px rgba(0, 0, 0, 0.7);
+  }
+
+  .intro-inscriptions span {
+    @apply absolute block leading-none opacity-0;
+    font-size: clamp(4rem, 12vw, 12rem);
+  }
+
+  .intro-inscriptions span:nth-child(1) {
+    left: 12%;
+    top: 19%;
+  }
+
+  .intro-inscriptions span:nth-child(2) {
+    right: 12%;
+    top: 13%;
+    color: rgba(200, 143, 74, 0.14);
+  }
+
+  .intro-inscriptions span:nth-child(3) {
+    bottom: 15%;
+    left: 20%;
+    color: rgba(200, 143, 74, 0.15);
+  }
+
+  .intro-inscriptions span:nth-child(4) {
+    bottom: 20%;
+    right: 18%;
+    color: rgba(245, 236, 221, 0.12);
+  }
+
+  .intro-artifact-stage {
+    @apply z-10;
+    left: 50%;
+    top: 50%;
+    height: min(68svh, 42rem);
+    width: min(54vw, 35rem);
+    transform-style: preserve-3d;
+  }
+
+  .artifact-silhouette {
+    @apply absolute;
+    inset: 6% 22% 4%;
+    clip-path: polygon(18% 0, 78% 6%, 100% 34%, 89% 100%, 16% 92%, 0 51%);
+    background:
+      radial-gradient(circle at 42% 18%, rgba(245, 214, 162, 0.18), transparent 8rem),
+      radial-gradient(circle at 66% 74%, rgba(54, 26, 12, 0.56), transparent 10rem),
+      repeating-linear-gradient(12deg, rgba(255, 220, 160, 0.07) 0 1px, transparent 1px 16px),
+      linear-gradient(135deg, rgba(191, 128, 62, 0.58), rgba(61, 35, 20, 0.52) 56%, rgba(205, 139, 70, 0.28));
+    border: 1px solid rgba(226, 165, 87, 0.32);
+    box-shadow:
+      inset 0 0 34px rgba(255, 218, 162, 0.08),
+      inset 0 -42px 80px rgba(0, 0, 0, 0.28),
+      0 48px 140px rgba(0, 0, 0, 0.72),
+      0 0 90px rgba(200, 143, 74, 0.2);
+  }
+
+  .artifact-silhouette::before,
+  .artifact-silhouette::after {
+    content: "";
+    @apply absolute;
+  }
+
+  .artifact-silhouette::before {
+    inset: 11% 13%;
+    border: 1px solid rgba(245, 204, 136, 0.24);
+    clip-path: polygon(18% 0, 80% 4%, 100% 33%, 87% 100%, 14% 94%, 0 52%);
+    background:
+      linear-gradient(90deg, transparent 0 30%, rgba(28, 15, 7, 0.36) 30.6% 31%, transparent 31.4%),
+      linear-gradient(0deg, transparent 0 48%, rgba(28, 15, 7, 0.3) 48.6% 49%, transparent 49.4%),
+      repeating-linear-gradient(12deg, transparent 0 26px, rgba(103, 240, 231, 0.045) 27px 28px, transparent 29px 64px);
+    opacity: 0.92;
+  }
+
+  .artifact-silhouette::after {
+    inset: 20% 22%;
+    background:
+      linear-gradient(90deg, transparent 0 30%, rgba(243, 208, 154, 0.2) 30.5% 31.5%, transparent 32%),
+      linear-gradient(90deg, transparent 0 56%, rgba(243, 208, 154, 0.16) 56.5% 57.5%, transparent 58%),
+      linear-gradient(0deg, transparent 0 38%, rgba(243, 208, 154, 0.14) 38.5% 39.5%, transparent 40%),
+      linear-gradient(0deg, transparent 0 68%, rgba(243, 208, 154, 0.13) 68.5% 69.5%, transparent 70%);
+    filter: drop-shadow(0 0 14px rgba(200, 143, 74, 0.24));
+    opacity: 0.72;
+  }
+
+  .artifact-crack {
+    @apply absolute z-20 h-px origin-left bg-black/70;
+    box-shadow:
+      0 0 10px rgba(245, 199, 125, 0.2),
+      0 1px 0 rgba(245, 199, 125, 0.12);
+  }
+
+  .crack-a {
+    left: 41%;
+    top: 24%;
+    width: 34%;
+    transform: rotate(124deg);
+  }
+
+  .crack-b {
+    left: 27%;
+    top: 58%;
+    width: 30%;
+    transform: rotate(-22deg);
+  }
+
+  .crack-c {
+    right: 19%;
+    top: 66%;
+    width: 26%;
+    transform: rotate(82deg);
+  }
+
+  .intro-title-card {
+    @apply absolute z-20 border border-line bg-black/35 px-5 py-4 backdrop-blur-2xl md:px-6 md:py-5;
+    bottom: clamp(6.5rem, 13svh, 9rem);
+    left: clamp(1.25rem, 6vw, 6rem);
+    max-width: min(34rem, calc(100vw - 2.5rem));
+    box-shadow:
+      inset 0 0 0 1px rgba(245, 204, 136, 0.06),
+      0 30px 100px rgba(0, 0, 0, 0.5);
+  }
+
+  .intro-title-card span {
+    @apply block text-[0.62rem] font-bold uppercase leading-relaxed tracking-[0.18em] text-signal;
+  }
+
+  .intro-title-card strong {
+    @apply mt-3 block font-serif text-4xl font-normal leading-none text-bone md:text-6xl;
+    text-shadow: 0 0 44px rgba(200, 143, 74, 0.24);
+  }
+
+  .intro-transition {
+    @apply z-30;
+    left: -12%;
+    width: 124%;
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(3, 2, 1, 0.92) 31%, rgba(231, 175, 96, 0.28) 49%, rgba(3, 2, 1, 0.96) 67%, transparent 100%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(200, 143, 74, 0.08), rgba(0, 0, 0, 0.3));
+    filter: blur(1px);
+  }
+
+  .skip-intro {
+    @apply absolute bottom-5 right-5 z-20 border border-line bg-black/25 px-4 py-3 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-smoke backdrop-blur-xl transition hover:border-cyan/50 hover:text-cyan md:bottom-8 md:right-8;
+  }
+
+  #site-nav.is-scrolled {
+    @apply border-line bg-ink/80 backdrop-blur-2xl;
+    box-shadow: 0 24px 100px rgba(0, 0, 0, 0.35);
+  }
+
+  .brand {
+    @apply inline-flex items-baseline gap-1 text-bone transition duration-300 hover:text-cyan;
+  }
+
+  .nav-link {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-smoke transition duration-300 hover:text-cyan;
+  }
+
+  .mobile-link {
+    @apply border border-line bg-coal/95 px-4 py-3 text-sm uppercase tracking-[0.14em] text-smoke backdrop-blur-xl transition hover:border-cyan/50 hover:text-cyan;
+  }
+
+  [data-mobile-menu].is-open {
+    @apply pointer-events-auto max-h-80 opacity-100;
+  }
+
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 border px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] transition duration-300;
+  }
+
+  .btn svg {
+    @apply text-base transition duration-300;
+  }
+
+  .btn:hover svg {
+    transform: translate3d(2px, -2px, 0);
+  }
+
+  .btn-primary {
+    @apply border-signal bg-signal text-ink shadow-scan hover:border-cyan hover:bg-cyan hover:text-ink;
+  }
+
+  .btn-secondary {
+    @apply border-line bg-black/20 text-bone backdrop-blur-xl hover:border-cyan/60 hover:bg-cyan/5 hover:text-cyan;
+  }
+
+  .icon-btn {
+    @apply inline-flex h-11 w-11 items-center justify-center border border-line text-xl text-bone transition hover:border-cyan/50 hover:bg-cyan/5 hover:text-cyan;
+  }
+
+  .tag {
+    @apply inline-block max-w-full border border-line bg-coal/50 px-3 py-1.5 text-left text-[0.64rem] font-semibold uppercase leading-relaxed tracking-[0.16em] text-smoke backdrop-blur;
+    box-shadow: inset 0 0 0 1px rgba(103, 240, 231, 0.035);
+    overflow-wrap: break-word;
+  }
+
+  .hero-section {
+    @apply relative isolate min-h-svh overflow-hidden border-b border-line bg-ink;
+  }
+
+  .archeo-hero {
+    background:
+      radial-gradient(circle at 67% 52%, rgba(103, 240, 231, 0.11), transparent 26rem),
+      radial-gradient(circle at 78% 67%, rgba(200, 143, 74, 0.18), transparent 32rem),
+      linear-gradient(180deg, #080604 0%, #120d08 58%, #080604 100%);
+  }
+
+  .hero-atmosphere,
+  .hero-topography,
+  .hero-ruin,
+  .grain-layer,
+  .hero-atmosphere::before,
+  .hero-atmosphere::after {
+    @apply pointer-events-none absolute inset-0 z-0;
+  }
+
+  .hero-atmosphere::before {
+    content: "";
+    background:
+      repeating-radial-gradient(circle at 74% 48%, rgba(103, 240, 231, 0.14) 0 1px, transparent 1px 18px),
+      repeating-linear-gradient(112deg, transparent 0 28px, rgba(215, 170, 102, 0.05) 29px 30px, transparent 31px 72px);
+    mask-image: radial-gradient(circle at 70% 48%, black 0%, transparent 64%);
+  }
+
+  .hero-atmosphere::after {
+    content: "";
+    background:
+      linear-gradient(90deg, rgba(8, 6, 4, 0.78), transparent 45%, rgba(8, 6, 4, 0.12)),
+      linear-gradient(180deg, transparent, rgba(8, 6, 4, 0.88));
+  }
+
+  .hero-topography {
+    opacity: 0.5;
+    background-image:
+      radial-gradient(ellipse at 72% 52%, transparent 0 18%, rgba(103, 240, 231, 0.2) 18.2% 18.6%, transparent 18.8% 26%, rgba(200, 143, 74, 0.14) 26.2% 26.6%, transparent 26.8%),
+      linear-gradient(90deg, rgba(215, 170, 102, 0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(215, 170, 102, 0.055) 1px, transparent 1px);
+    background-size: auto, 72px 72px, 72px 72px;
+    mask-image: linear-gradient(to bottom, black 0%, black 74%, transparent 100%);
+  }
+
+  .hero-ruin {
+    background:
+      linear-gradient(90deg, transparent 0 66%, rgba(200, 143, 74, 0.12) 66% 67%, transparent 67%),
+      linear-gradient(180deg, transparent 0 62%, rgba(200, 143, 74, 0.09) 62% 65%, transparent 65%);
+  }
+
+  .hero-title {
+    @apply flex max-w-full flex-col text-[clamp(3.2rem,10.8vw,9.4rem)] font-extrabold leading-[0.9] tracking-normal text-bone;
+    text-shadow:
+      0 0 34px rgba(200, 143, 74, 0.22),
+      0 0 120px rgba(103, 240, 231, 0.12);
+  }
+
+  .hero-title span {
+    @apply block max-w-full;
+    overflow-wrap: break-word;
+  }
+
+  .hero-lede {
+    @apply mt-8 max-w-2xl text-base font-medium leading-8 text-smoke md:text-lg;
+  }
+
+  .hero-console,
+  .research-card,
+  .data-panel,
+  .analysis-panel,
+  .archive-card,
+  .artifact-preview,
+  .video-shell {
+    @apply relative overflow-hidden border border-line bg-coal/65 backdrop-blur-2xl transition duration-500;
+    box-shadow:
+      inset 0 0 0 1px rgba(103, 240, 231, 0.035),
+      0 30px 110px rgba(0, 0, 0, 0.34);
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translate3d(0, var(--lift, 0), 0);
+  }
+
+  .hero-console {
+    @apply p-5;
+  }
+
+  .hero-console::before,
+  .research-card::before,
+  .data-panel::before,
+  .analysis-panel::before,
+  .archive-card::before,
+  .artifact-preview::before,
+  .video-shell::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 opacity-0 transition duration-500;
+    background:
+      linear-gradient(135deg, rgba(200, 143, 74, 0.17), transparent 42%, rgba(103, 240, 231, 0.08)),
+      repeating-linear-gradient(90deg, rgba(215, 170, 102, 0.04) 0 1px, transparent 1px 14px);
+  }
+
+  .hero-console:hover,
+  .research-card:hover,
+  .data-panel:hover,
+  .analysis-panel:hover,
+  .archive-card:hover,
+  .artifact-preview:hover,
+  .video-shell:hover {
+    --lift: -6px;
+    @apply border-cyan/45;
+  }
+
+  .hero-console:hover::before,
+  .research-card:hover::before,
+  .data-panel:hover::before,
+  .analysis-panel:hover::before,
+  .archive-card:hover::before,
+  .artifact-preview:hover::before,
+  .video-shell:hover::before {
+    @apply opacity-100;
+  }
+
+  .hero-console > *,
+  .research-card > *,
+  .data-panel > *,
+  .analysis-panel > *,
+  .archive-card > *,
+  .artifact-preview > *,
+  .video-shell > * {
+    @apply relative z-10;
+  }
+
+  .console-top {
+    @apply mb-10 flex gap-2;
+  }
+
+  .console-top span {
+    @apply h-2 w-2 rounded-full bg-signal/80;
+  }
+
+  .console-lock {
+    @apply mb-5 flex items-center justify-between border border-line bg-ink/45 px-3 py-2 text-[0.64rem] font-bold uppercase tracking-[0.16em] text-smoke;
+  }
+
+  .console-lock strong {
+    @apply text-cyan;
+  }
+
+  .hero-console p {
+    @apply max-w-sm text-lg font-medium leading-8 text-bone;
+  }
+
+  .console-meter {
+    @apply my-8 h-px overflow-hidden bg-line;
+  }
+
+  .console-meter span {
+    @apply block h-full w-1/2 bg-gradient-to-r from-signal via-cyan to-bone shadow-scan;
+    animation: meter 2.6s ease-in-out infinite;
+  }
+
+  .console-actions {
+    @apply flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row;
+  }
+
+  .hero-dock {
+    @apply grid gap-3 border-t border-line pt-6 sm:grid-cols-4;
+  }
+
+  .hero-dock span {
+    @apply border border-line bg-black/25 px-4 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-smoke backdrop-blur transition duration-300 hover:border-cyan/45 hover:text-cyan;
+  }
+
+  .reveal-clip {
+    @apply overflow-hidden;
+  }
+
+  .reveal-clip.is-visible {
+    overflow: visible;
+  }
+
+  .reveal-clip > span,
+  [data-clip] {
+    transform: translateY(115%);
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-clip].is-visible,
+  .reveal-clip.is-visible > span {
+    transform: translateY(0);
+  }
+
+  .reveal-up {
+    @apply opacity-0;
+    transform: translateY(32px);
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-up.is-visible {
+    @apply opacity-100;
+    transform: translateY(0);
+  }
+
+  .delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .delay-200 {
+    transition-delay: 200ms;
+  }
+
+  .delay-300 {
+    transition-delay: 300ms;
+  }
+
+  .marquee-section {
+    @apply overflow-hidden border-b border-line bg-coal py-3;
+    background:
+      linear-gradient(90deg, rgba(200, 143, 74, 0.08), transparent 40%, rgba(103, 240, 231, 0.045)),
+      theme("colors.coal");
+  }
+
+  .marquee-track {
+    @apply flex w-max whitespace-nowrap text-xs font-semibold uppercase tracking-[0.2em] text-fog;
+    animation: marquee 26s linear infinite;
+  }
+
+  .marquee-track span {
+    @apply pr-8;
+  }
+
+  .overview-section,
+  .excavation-section,
+  .video-section,
+  .intelligence-section,
+  .reconstruction-section,
+  .archive-section,
+  .mission-section {
+    @apply relative isolate mx-auto max-w-[1440px] overflow-hidden px-5 py-20 md:px-10 lg:py-28;
+  }
+
+  .overview-section::before,
+  .excavation-section::before,
+  .video-section::before,
+  .intelligence-section::before,
+  .reconstruction-section::before,
+  .archive-section::before,
+  .mission-section::before,
+  .cta-section::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 z-0;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(200, 143, 74, 0.11), transparent 24rem),
+      radial-gradient(circle at 86% 22%, rgba(103, 240, 231, 0.065), transparent 24rem),
+      repeating-radial-gradient(circle at 78% 12%, rgba(215, 170, 102, 0.07) 0 1px, transparent 1px 18px);
+    opacity: 0.72;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%);
+  }
+
+  .section-intro,
+  .feature-grid,
+  .excavation-layout,
+  .video-shell,
+  .artifact-layout,
+  .reconstruction-stage,
+  .archive-grid,
+  .mission-inner {
+    @apply relative z-10;
+  }
+
+  .section-intro,
+  .video-heading {
+    @apply mb-10 flex flex-col gap-5 md:mb-14 md:flex-row md:items-end md:justify-between;
+  }
+
+  .section-intro h2,
+  .video-heading h2 {
+    @apply max-w-4xl text-4xl font-extrabold leading-none tracking-normal text-bone md:text-6xl lg:text-7xl;
+  }
+
+  .section-intro p {
+    @apply max-w-xl text-sm leading-7 text-smoke md:text-base;
+  }
+
+  .feature-grid {
+    @apply grid gap-4 md:grid-cols-3;
+  }
+
+  .research-card {
+    @apply min-h-80 p-6;
+  }
+
+  .research-card svg {
+    @apply mb-14 text-4xl text-signal transition duration-500;
+  }
+
+  .research-card:hover svg {
+    @apply text-cyan;
+    transform: translate3d(0, -4px, 0) scale(1.08);
+  }
+
+  .research-card span,
+  .data-panel span,
+  .analysis-panel span,
+  .archive-card span {
+    @apply text-xs font-bold uppercase tracking-[0.16em] text-fog;
+  }
+
+  .research-card h3 {
+    @apply mt-3 text-3xl font-extrabold text-bone;
+  }
+
+  .research-card p,
+  .data-panel p,
+  .archive-card p {
+    @apply mt-4 max-w-sm text-sm leading-7 text-smoke;
+  }
+
+  .excavation-layout {
+    @apply grid gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(280px,0.6fr)];
+  }
+
+  .excavation-map {
+    @apply relative min-h-[34rem] overflow-hidden border border-line bg-coal/55;
+    background:
+      radial-gradient(circle at 48% 52%, rgba(103, 240, 231, 0.12), transparent 16rem),
+      linear-gradient(90deg, rgba(215, 170, 102, 0.09) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(215, 170, 102, 0.065) 1px, transparent 1px),
+      theme("colors.coal");
+    background-size: auto, 72px 72px, 72px 72px, auto;
+  }
+
+  .map-pulse,
+  .map-point,
+  .map-depth {
+    @apply absolute;
+  }
+
+  .map-pulse {
+    @apply left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan/35;
+    animation: pulseMap 3.4s ease-in-out infinite;
+  }
+
+  .map-point {
+    @apply h-3 w-3 rounded-full bg-cyan shadow-scan;
+  }
+
+  .point-a {
+    left: 28%;
+    top: 36%;
+  }
+
+  .point-b {
+    left: 63%;
+    top: 48%;
+  }
+
+  .point-c {
+    left: 46%;
+    top: 68%;
+  }
+
+  .map-depth {
+    @apply bottom-5 left-5 border border-line bg-black/35 px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-smoke backdrop-blur-xl;
+  }
+
+  .data-stack {
+    @apply grid gap-4;
+  }
+
+  .data-panel {
+    @apply p-5;
+  }
+
+  .data-panel strong,
+  .analysis-panel strong,
+  .archive-card strong {
+    @apply mt-3 block text-2xl font-extrabold text-bone;
+  }
+
+  .video-section {
+    @apply border-y border-line;
+    background:
+      linear-gradient(180deg, rgba(20, 16, 11, 0.9), rgba(8, 6, 4, 0.96)),
+      theme("colors.coal");
+  }
+
+  .video-frame {
+    @apply relative aspect-video overflow-hidden bg-black;
+  }
+
+  .video-frame iframe {
+    @apply absolute inset-0 h-full w-full border-0;
+  }
+
+  .video-placeholder {
+    @apply pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 text-center text-xs font-bold uppercase tracking-[0.18em] text-cyan/90;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(103, 240, 231, 0.11), transparent 18rem),
+      linear-gradient(135deg, rgba(200, 143, 74, 0.1), rgba(0, 0, 0, 0.72));
+  }
+
+  .video-placeholder svg {
+    @apply text-6xl text-cyan/80;
+    animation: pulseIcon 2s ease-in-out infinite;
+  }
+
+  .artifact-layout {
+    @apply grid gap-5 lg:grid-cols-[0.9fr_1.1fr];
+  }
+
+  .artifact-preview {
+    @apply grid min-h-[32rem] place-items-center p-8;
+  }
+
+  .artifact-preview span {
+    @apply absolute bottom-5 left-5 border border-line bg-black/35 px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-smoke;
+  }
+
+  .artifact-stone {
+    @apply relative h-72 w-48 border border-signal/40 bg-signal/10;
+    clip-path: polygon(13% 0, 82% 6%, 100% 32%, 89% 100%, 17% 93%, 0 56%);
+    box-shadow:
+      inset 0 0 44px rgba(245, 236, 221, 0.08),
+      0 0 70px rgba(200, 143, 74, 0.18);
+  }
+
+  .artifact-stone::before,
+  .artifact-stone::after {
+    content: "";
+    @apply absolute inset-8 border border-cyan/30;
+  }
+
+  .artifact-stone::after {
+    @apply inset-16 border-signal/30;
+    transform: rotate(-8deg);
+  }
+
+  .analysis-grid {
+    @apply grid gap-4 sm:grid-cols-2;
+  }
+
+  .analysis-panel {
+    @apply min-h-44 p-5;
+  }
+
+  .reconstruction-stage {
+    @apply grid min-h-[34rem] gap-8 overflow-hidden border border-line bg-coal/55 p-6 md:grid-cols-[1fr_360px] md:items-end md:p-10;
+  }
+
+  .wire-temple {
+    @apply relative min-h-[24rem] overflow-hidden;
+    background:
+      linear-gradient(90deg, rgba(103, 240, 231, 0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(103, 240, 231, 0.055) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .wire-temple span {
+    @apply absolute bottom-8 block origin-bottom border border-cyan/45 bg-cyan/5 opacity-30;
+    transform: scaleY(0.28);
+  }
+
+  .wire-temple span:nth-child(1) {
+    left: 14%;
+    height: 52%;
+    width: 13%;
+  }
+
+  .wire-temple span:nth-child(2) {
+    left: 32%;
+    height: 72%;
+    width: 13%;
+  }
+
+  .wire-temple span:nth-child(3) {
+    left: 50%;
+    height: 62%;
+    width: 13%;
+  }
+
+  .wire-temple span:nth-child(4) {
+    left: 68%;
+    height: 46%;
+    width: 13%;
+  }
+
+  .reconstruction-copy {
+    @apply border border-line bg-black/30 p-5 backdrop-blur-xl;
+  }
+
+  .reconstruction-copy span {
+    @apply text-xs font-bold uppercase tracking-[0.18em] text-cyan;
+  }
+
+  .reconstruction-copy strong {
+    @apply mt-4 block text-2xl leading-tight text-bone;
+  }
+
+  .archive-grid {
+    @apply grid gap-4 md:grid-cols-3;
+  }
+
+  .archive-card {
+    @apply min-h-72 p-5;
+  }
+
+  .mission-inner {
+    @apply mx-auto max-w-4xl border border-line bg-coal/55 p-6 text-center backdrop-blur-2xl md:p-12;
+  }
+
+  .mission-inner h2 {
+    @apply mt-8 text-5xl font-extrabold leading-none text-bone md:text-7xl;
+  }
+
+  .mission-inner p {
+    @apply mx-auto mt-8 max-w-2xl text-base leading-8 text-smoke md:text-lg;
+  }
+
+  .cta-section {
+    @apply relative isolate overflow-hidden border-t border-line px-0 py-24 md:py-32;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(103, 240, 231, 0.08), transparent 28rem),
+      radial-gradient(circle at 50% 80%, rgba(200, 143, 74, 0.14), transparent 30rem);
+  }
+
+  .cta-ghost {
+    @apply pointer-events-none absolute inset-0 flex select-none items-center justify-center text-[18vw] font-extrabold leading-none tracking-normal text-signal/[0.055];
+  }
+
+  .cta-title {
+    @apply mt-8 text-5xl font-extrabold leading-none tracking-normal text-bone md:text-7xl lg:text-8xl;
+  }
+}
+
+@layer utilities {
+  @keyframes torchPulse {
+    0%,
+    100% {
+      opacity: 0.52;
+      transform: translate3d(-1%, 1%, 0) scale(1);
+    }
+
+    50% {
+      opacity: 0.78;
+      transform: translate3d(1.4%, -0.8%, 0) scale(1.04);
+    }
+  }
+
+  @keyframes fogDrift {
+    from {
+      transform: translate3d(-3%, 2%, 0) scale(1.08);
+    }
+
+    to {
+      transform: translate3d(3%, -1%, 0) scale(1.16);
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes meter {
+    0%,
+    100% {
+      transform: translateX(-40%);
+    }
+
+    50% {
+      transform: translateX(140%);
+    }
+  }
+
+  @keyframes pulseIcon {
+    0%,
+    100% {
+      opacity: 0.68;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes pulseMap {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: translate(-50%, -50%) scale(0.7);
+    }
+
+    50% {
+      opacity: 0.85;
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .intro-chamber {
+      display: none !important;
+    }
+
+    .reveal-up,
+    [data-clip],
+    .reveal-clip > span {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-title {
+      font-size: clamp(3rem, 17vw, 5.6rem);
+    }
+
+    .hero-dock {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .intro-artifact-stage {
+      height: min(62svh, 34rem);
+      width: min(84vw, 25rem);
+    }
+
+    .intro-inscriptions span {
+      font-size: clamp(3.4rem, 18vw, 6.5rem);
+    }
+
+    .intro-title-card {
+      bottom: 5.6rem;
+    }
+
+    .intro-title-card strong {
+      font-size: clamp(2.5rem, 11vw, 4rem);
+    }
+
+    .excavation-map,
+    .reconstruction-stage {
+      min-height: 28rem;
+    }
+  }
+}
